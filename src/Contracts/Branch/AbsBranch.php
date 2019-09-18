@@ -38,8 +38,8 @@ class AbsBranch
     {
         if (isset($this->closureBindTo)) {
             return $closure->call($this->closureBindTo, ... $params);
-        }else {
-            return $closure(... $params);
+        } else {
+            return call_user_func_array($closure, $params);
         }
     }
     

@@ -17,7 +17,7 @@ class Criteria
      * @param int $opts
      * @return BranchOption
      */
-    public static function opts(int $opts): BranchOption
+    public static function opts(int $opts = 0): BranchOption
     {
         return BranchOption::make($opts);
     }
@@ -27,7 +27,7 @@ class Criteria
      * @param mixed $checkValue
      * @return BranchSwitch
      */
-    public static function switch($checkValue): BranchSwitch
+    public static function switch($checkValue = null): BranchSwitch
     {
         return BranchSwitch::make($checkValue);
     }
@@ -37,7 +37,7 @@ class Criteria
      * @param mixed $data
      * @return BranchSwitchData
      */
-    public static function switchData($checkValue, $data): BranchSwitchData
+    public static function switchData($checkValue = null, $data = []): BranchSwitchData
     {
         return BranchSwitchData::make($checkValue)->with($data);
     }

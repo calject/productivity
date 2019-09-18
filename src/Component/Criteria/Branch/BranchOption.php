@@ -22,7 +22,7 @@ class BranchOption extends BranchSwitch
      */
     protected function init($checkValue)
     {
-        $this->closureBindTo = $this;
+    
     }
     
     /**
