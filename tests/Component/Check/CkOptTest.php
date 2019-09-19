@@ -7,7 +7,7 @@
 namespace CalJect\Productivity\Test\Component\Check;
 
 
-use CalJect\Productivity\Component\Check\CkOpt;
+use CalJect\Productivity\Components\Check\CkOpt;
 use PHPUnit\Framework\TestCase;
 
 class CkOptTest extends TestCase

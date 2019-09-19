@@ -7,7 +7,7 @@
 namespace CalJect\Productivity\Test\Component\Criteria;
 
 
-use CalJect\Productivity\Component\Criteria\Criteria;
+use CalJect\Productivity\Components\Criteria\Criteria;
 use PHPUnit\Framework\TestCase;
 
 class CriteriaTest extends TestCase

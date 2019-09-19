@@ -7,7 +7,7 @@
 namespace CalJect\Productivity\Test\Component\Check;
 
 
-use CalJect\Productivity\Component\Check\CkDef;
+use CalJect\Productivity\Components\Check\CkDef;
 use PHPUnit\Framework\TestCase;
 
 class CkDefTest extends TestCase
