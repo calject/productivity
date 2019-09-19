@@ -4,10 +4,10 @@
  * Date: 2019-09-17
  */
 
-namespace CalJect\Productivity\Component\Http\Client;
+namespace CalJect\Productivity\Components\Http\Client;
 
 
-use CalJect\Productivity\Component\Http\Curl\Curl;
+use CalJect\Productivity\Components\Http\Curl\Curl;
 use CalJect\Productivity\Contracts\ArrayConvertInterface;
 use CalJect\Productivity\Contracts\ToArray;
 

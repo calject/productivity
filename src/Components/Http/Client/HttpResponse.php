@@ -4,10 +4,10 @@
  * Date: 2019-09-17
  */
 
-namespace CalJect\Productivity\Component\Http\Client;
+namespace CalJect\Productivity\Components\Http\Client;
 
 
-use CalJect\Productivity\Component\Http\Curl\CurlResponse;
+use CalJect\Productivity\Components\Http\Curl\CurlResponse;
 
 class HttpResponse extends CurlResponse
 {

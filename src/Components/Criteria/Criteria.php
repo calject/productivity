@@ -4,12 +4,12 @@
  * Date: 2019-09-03
  */
 
-namespace CalJect\Productivity\Component\Criteria;
+namespace CalJect\Productivity\Components\Criteria;
 
 
-use CalJect\Productivity\Component\Criteria\Branch\BranchOption;
-use CalJect\Productivity\Component\Criteria\Branch\BranchSwitch;
-use CalJect\Productivity\Component\Criteria\Branch\BranchSwitchData;
+use CalJect\Productivity\Components\Criteria\Branch\BranchOption;
+use CalJect\Productivity\Components\Criteria\Branch\BranchSwitch;
+use CalJect\Productivity\Components\Criteria\Branch\BranchSwitchData;
 
 class Criteria
 {

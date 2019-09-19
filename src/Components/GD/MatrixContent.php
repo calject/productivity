@@ -6,7 +6,7 @@
  * Annotation:
  */
 
-namespace CalJect\Productivity\Component\GD;
+namespace CalJect\Productivity\Components\GD;
 
 
 class MatrixContent

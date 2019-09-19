@@ -4,13 +4,13 @@
  * Date: 2019-09-17
  */
 
-namespace CalJect\Productivity\Component\Http\Client;
+namespace CalJect\Productivity\Components\Http\Client;
 
 
-use CalJect\Productivity\Component\Criteria\Branch\BranchSwitchData;
-use CalJect\Productivity\Component\Criteria\Criteria;
-use CalJect\Productivity\Component\Http\Curl\Curl;
-use CalJect\Productivity\Component\Http\Curl\CurlInfo;
+use CalJect\Productivity\Components\Criteria\Branch\BranchSwitchData;
+use CalJect\Productivity\Components\Criteria\Criteria;
+use CalJect\Productivity\Components\Http\Curl\Curl;
+use CalJect\Productivity\Components\Http\Curl\CurlInfo;
 
 class HttpClient
 {

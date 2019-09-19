@@ -4,13 +4,13 @@
  * Date: 2019-09-16
  */
 
-namespace CalJect\Productivity\Component\Http\Curl;
+namespace CalJect\Productivity\Components\Http\Curl;
 
 use CalJect\Productivity\Contracts\ArrayAccess\AbsArrayAccessWithArray;
 
 /**
  * Class CurlInfo
- * @package CalJect\Productivity\Component\Http\Curl
+ * @package CalJect\Productivity\Components\Http\Curl
  */
 class CurlInfo extends AbsArrayAccessWithArray
 {

@@ -4,14 +4,14 @@
  * Date: 2019-09-18
  */
 
-namespace CalJect\Productivity\Component\Http\Service;
+namespace CalJect\Productivity\Components\Http\Service;
 
 
-use CalJect\Productivity\Component\Criteria\Branch\BranchSwitchData;
-use CalJect\Productivity\Component\Criteria\Criteria;
-use CalJect\Productivity\Component\Http\Client\HttpClient;
-use CalJect\Productivity\Component\Http\Client\HttpRequest;
-use CalJect\Productivity\Component\Http\Client\HttpResponse;
+use CalJect\Productivity\Components\Criteria\Branch\BranchSwitchData;
+use CalJect\Productivity\Components\Criteria\Criteria;
+use CalJect\Productivity\Components\Http\Client\HttpClient;
+use CalJect\Productivity\Components\Http\Client\HttpRequest;
+use CalJect\Productivity\Components\Http\Client\HttpResponse;
 use Closure;
 
 class HttpService

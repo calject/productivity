@@ -4,11 +4,11 @@
  * Date: 2019-09-03
  */
 
-namespace CalJect\Productivity\Component\Criteria\Branch;
+namespace CalJect\Productivity\Components\Criteria\Branch;
 
 /**
  * Class BranchSwitchData
- * @package CalJect\Productivity\Component\Criteria\Branch
+ * @package CalJect\Productivity\Components\Criteria\Branch
  */
 class BranchSwitchData extends BranchSwitch
 {

@@ -4,7 +4,7 @@
  * Date: 2019-09-03
  */
 
-namespace CalJect\Productivity\Component\Check;
+namespace CalJect\Productivity\Components\Check;
 
 class CkOpt
 {

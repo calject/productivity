@@ -4,11 +4,11 @@
  * Date: 2019-09-16
  */
 
-namespace CalJect\Productivity\Component\Http\Curl;
+namespace CalJect\Productivity\Components\Http\Curl;
 
 /**
  * Class CurlResponse
- * @package CalJect\Productivity\Component\Http\Curl
+ * @package CalJect\Productivity\Components\Http\Curl
  */
 class CurlResponse
 {
