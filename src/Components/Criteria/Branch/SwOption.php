@@ -10,7 +10,7 @@ use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Utils\ClosureUtil;
 use CalJect\Productivity\Utils\SCkOpt;
 
-class BranchOption extends BranchSwitch
+class SwOption extends SwBranch
 {
     /**
      * 设置回调附加的数据体

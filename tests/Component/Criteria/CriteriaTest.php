@@ -7,7 +7,7 @@
 namespace CalJect\Productivity\Test\Component\Criteria;
 
 
-use CalJect\Productivity\Components\Criteria\Branch\BranchControl;
+use CalJect\Productivity\Components\Criteria\Branch\SwControl;
 use CalJect\Productivity\Components\Criteria\Criteria;
 use CalJect\Productivity\Exceptions\ClosureRunException;
 use PHPUnit\Framework\TestCase;
@@ -97,21 +97,21 @@ class CriteriaTest extends TestCase
             return '0000';
         })->bind('test1', function () {
             return 'test1';
-        })->bind('test2', function (BranchControl $control) {
+        })->bind('test2', function (SwControl $control) {
             return $control->getCheckValue();
-        })->bind('test3', function (BranchControl $control) {
+        })->bind('test3', function (SwControl $control) {
             return call_user_func($control->getDefault(), $control);
-        })->bind('test4', function (BranchControl $control) {
+        })->bind('test4', function (SwControl $control) {
             return call_user_func($control->getBinds()['test5'], $control);
         })->bind('test5', function () {
             return 'test5';
-        })->bind('test6', function (BranchControl $control) {
+        })->bind('test6', function (SwControl $control) {
             return $control->callDefault();
-        })->bind('test7', function (BranchControl $control) {
+        })->bind('test7', function (SwControl $control) {
             return $control->call('test5');
         })->default(function () {
             return 'default';
-        })->bind('test8', BranchControl::CLOSURE_DEFAULT())->bind('test9', BranchControl::CLOSURE_BIND('test5'));;
+        })->bind('test8', SwControl::CLOSURE_DEFAULT())->bind('test9', SwControl::CLOSURE_BIND('test5'));;
         $this->assertSame($criteria->handle(), $result);
     }
 

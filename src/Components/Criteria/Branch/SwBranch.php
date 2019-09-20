@@ -12,10 +12,10 @@ use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Utils\ClosureUtil;
 use Closure;
 
-class BranchSwitch extends AbsBranch
+class SwBranch extends AbsBranch
 {
     /**
-     * @var BranchControl
+     * @var SwControl
      */
     protected $control;
     
@@ -25,7 +25,7 @@ class BranchSwitch extends AbsBranch
      */
     public function __construct($checkValue = null)
     {
-        $this->control = new BranchControl();
+        $this->control = new SwControl();
         $this->control->setCheckValue($checkValue);
         $this->init($checkValue, $this->control);
     }
@@ -33,9 +33,9 @@ class BranchSwitch extends AbsBranch
     /**
      * 初始化
      * @param mixed $checkValue
-     * @param BranchControl $control
+     * @param SwControl $control
      */
-    protected function init($checkValue, BranchControl $control)
+    protected function init($checkValue, SwControl $control)
     {
     
     }
@@ -53,11 +53,12 @@ class BranchSwitch extends AbsBranch
     /**
      * 设置检查值
      * @param mixed|Closure|string $checkValue
+     * @param mixed $data
      * @return $this
      */
-    public function send($checkValue)
+    public function send($checkValue, $data = null)
     {
-        $this->control->setCheckValue($checkValue);
+        $this->control->setCheckValue($checkValue)->setData($data);
         return $this;
     }
     
@@ -115,7 +116,7 @@ class BranchSwitch extends AbsBranch
     }
     
     /**
-     * @return BranchControl
+     * @return SwControl
      */
     public function control()
     {

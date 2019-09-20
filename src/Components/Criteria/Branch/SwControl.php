@@ -11,7 +11,7 @@ use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Utils\ClosureUtil;
 use Closure;
 
-class BranchControl
+class SwControl
 {
     /**
      * @var mixed
@@ -81,7 +81,7 @@ class BranchControl
      */
     public static function CLOSURE_DEFAULT(): Closure
     {
-        return function (BranchControl $control) {
+        return function (SwControl $control) {
             return $control->callDefault();
         };
     }
@@ -92,7 +92,7 @@ class BranchControl
      */
     public static function CLOSURE_BIND($key): Closure
     {
-        return function (BranchControl $control) use ($key) {
+        return function (SwControl $control) use ($key) {
             return $control->callInDefault($key);
         };
     }

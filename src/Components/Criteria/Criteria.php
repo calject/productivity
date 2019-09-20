@@ -7,39 +7,41 @@
 namespace CalJect\Productivity\Components\Criteria;
 
 
-use CalJect\Productivity\Components\Criteria\Branch\BranchOption;
-use CalJect\Productivity\Components\Criteria\Branch\BranchSwitch;
+use CalJect\Productivity\Components\Criteria\Branch\SwOption;
+use CalJect\Productivity\Components\Criteria\Branch\SwBranch;
 use CalJect\Productivity\Components\Criteria\Branch\BranchSwitchData;
 
 class Criteria
 {
     /**
      * @param int $opts
-     * @return BranchOption
+     * @return SwOption
      */
-    public static function opts(int $opts = 0): BranchOption
+    public static function opts(int $opts = 0): SwOption
     {
-        return BranchOption::make($opts);
+        return SwOption::make($opts);
     }
     
     
     /**
      * @param mixed $checkValue
-     * @return BranchSwitch
+     * @return SwBranch
      */
-    public static function switch($checkValue = null): BranchSwitch
+    public static function switch($checkValue = null): SwBranch
     {
-        return BranchSwitch::make($checkValue);
+        return SwBranch::make($checkValue);
     }
     
     /**
      * @param mixed $checkValue
      * @param mixed $data
-     * @return BranchSwitchData
+     * @return SwBranch
      */
-    public static function switchData($checkValue = null, $data = []): BranchSwitchData
+    public static function switchData($checkValue = null, $data = []): SwBranch
     {
-        return BranchSwitchData::make($checkValue)->with($data);
+        $branch = SwBranch::make($checkValue);
+        $branch->control()->setData($data);
+        return $branch;
     }
     
 }
