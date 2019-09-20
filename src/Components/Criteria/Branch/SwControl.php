@@ -7,6 +7,7 @@
 namespace CalJect\Productivity\Components\Criteria\Branch;
 
 
+use CalJect\Productivity\Components\Criteria\Criteria;
 use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Utils\ClosureUtil;
 use Closure;
@@ -33,15 +34,30 @@ class SwControl
      */
     protected $data;
     
+    /**
+     * @var int
+     */
+    protected $options = 0;
+    
+    /**
+     * SwControl constructor.
+     * @param int $options
+     */
+    public function __construct(int $options = 0)
+    {
+        $this->options = $options;
+    }
+    
     /*---------------------------------------------- call ----------------------------------------------*/
     /**
+     * @param array $params
      * @return mixed
      * @throws ClosureRunException
      */
-    public function callDefault()
+    public function callDefault(array $params = [])
     {
         if (isset($this->default)) {
-            return ClosureUtil::checkClosureWithExec($this->default, [$this]);
+            return ClosureUtil::checkClosureWithExec($this->default, $params ?: $this->getParams());
         } else {
             return $this->checkValue;
         }
@@ -58,7 +74,7 @@ class SwControl
         if (isset($this->binds[$key])) {
             return ClosureUtil::checkClosureWithExec($this->binds[$key], [$this]);
         } else {
-            return $noFoundHandle ? ClosureUtil::checkClosureWithExec($noFoundHandle, [$this]) : null;
+            return $noFoundHandle ? ClosureUtil::checkClosureWithExec($noFoundHandle, $this->getParams()) : null;
         }
     }
     
@@ -70,7 +86,7 @@ class SwControl
     public function callInDefault($key)
     {
         if (isset($this->binds[$key])) {
-            return ClosureUtil::checkClosureWithExec($this->binds[$key], [$this]);
+            return ClosureUtil::checkClosureWithExec($this->binds[$key], $this->getParams());
         } else {
             return $this->callDefault();
         }
@@ -105,6 +121,24 @@ class SwControl
     public function has($key): bool
     {
         return isset($this->binds[$key]);
+    }
+    
+    /**
+     * @return array
+     */
+    protected function getParams(): array
+    {
+        switch ($this->options) {
+            case Criteria::SW_OPT_BRANCH_PARAMS_VALUES:
+                return [$this->checkValue, $this];
+            case Criteria::SW_OPT_BRANCH_PARAMS_DATA:
+                return [$this->data, $this];
+            case Criteria::SW_OPT_BRANCH_PARAMS_DATA_VALUES:
+                return [$this->data, $this->checkValue, $this];
+            case Criteria::SW_OPT_BRANCH_PARAMS_CONTROL:
+            default:
+                return [$this];
+        }
     }
     
     /*---------------------------------------------- set/get ----------------------------------------------*/
@@ -160,6 +194,16 @@ class SwControl
         return $this;
     }
     
+    /**
+     * @param int $options
+     * @return $this
+     */
+    public function setOptions(int $options)
+    {
+        $this->options = $options;
+        return $this;
+    }
+    
     /*---------------------------------------------- get ----------------------------------------------*/
     
     /**
@@ -192,5 +236,13 @@ class SwControl
     public function getData()
     {
         return $this->data;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getOptions(): int
+    {
+        return $this->options;
     }
 }

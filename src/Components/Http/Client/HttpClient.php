@@ -8,9 +8,12 @@ namespace CalJect\Productivity\Components\Http\Client;
 
 
 use CalJect\Productivity\Components\Criteria\Branch\BranchSwitchData;
+use CalJect\Productivity\Components\Criteria\Branch\SwBranch;
+use CalJect\Productivity\Components\Criteria\Branch\SwControl;
 use CalJect\Productivity\Components\Criteria\Criteria;
 use CalJect\Productivity\Components\Http\Curl\Curl;
 use CalJect\Productivity\Components\Http\Curl\CurlInfo;
+use CalJect\Productivity\Exceptions\ClosureRunException;
 
 class HttpClient
 {
@@ -57,13 +60,13 @@ class HttpClient
     
     /**
      * request参数配置处理对象实例
-     * @var BranchSwitchData
+     * @var SwBranch
      */
     protected $requestHandle;
     
     /**
      * 配置参数处理对象实例
-     * @var BranchSwitchData
+     * @var SwBranch
      */
     protected $optionHandle;
     
@@ -91,21 +94,21 @@ class HttpClient
     protected function init()
     {
         /* ======== 初始化request参数配置处理实例(从设置的request参数按键值设置到curl请求配置中) ======== */
-        $this->requestHandle = Criteria::switchData();
+        $this->requestHandle = Criteria::newSwitchWithOptions(Criteria::SW_OPT_BRANCH_PARAMS_DATA_VALUES);
         $this->requestHandle->default(function ($value, $key) {
             // 调用Curl类的setXxx函数设置对应的参数值
             $this->curl->{'set'.ucfirst($key)}($value);
         });
         /* ======== 绑定body参数处理 ======== */
-        $this->requestHandle->bind('body', function ($value, $key, $default) {
+        $this->requestHandle->bind('body', function ($value, $key, SwControl $control) {
             // 自定义body参数设置的处理，然后交给default回调处理
             if ($this->optionValue(self::OPTIONS_BODY_HTTP_BUILDER)) {
                 $value = is_array($value) ? http_build_query($value) : $value;
             }
-            return $default($value, $key);
+            return $control->callDefault([$value, $key, $control]);
         });
         /* ======== 初始化配置参数处理实例并绑定相关配置项处理 ======== */
-        $this->optionHandle = Criteria::switchData();
+        $this->optionHandle = Criteria::newSwitchWithOptions(Criteria::SW_OPT_BRANCH_PARAMS_DATA_VALUES);
         $this->optionHandle->bind(self::OPTIONS_REQUEST_HEADER_OUT, function ($value) {
             $this->curl->setRequestHeaderOut($value);
         });
@@ -191,6 +194,7 @@ class HttpClient
     /**
      * 执行curl 请求
      * @return HttpResponse
+     * @throws ClosureRunException
      */
     public function exec()
     {
@@ -206,6 +210,7 @@ class HttpClient
     /**
      * @param HttpRequest $request
      * @return HttpResponse
+     * @throws ClosureRunException
      */
     public function request(HttpRequest $request)
     {
@@ -334,12 +339,13 @@ class HttpClient
     /**
      * request参数配置处理
      * @return $this
+     * @throws ClosureRunException
      */
     protected function requestHandle()
     {
         /* ======== 设置请求参数配置 ======== */
         foreach ($this->request->toArray() as $option => $value) {
-            $this->requestHandle->send($option)->with($value)->handle();
+            $this->requestHandle->send($option, $value)->handle();
         }
         return $this;
     }
@@ -347,11 +353,12 @@ class HttpClient
     /**
      * 配置参数处理
      * @return $this
+     * @throws ClosureRunException
      */
     protected function optionHandle()
     {
         foreach ($this->options as $option => $value) {
-            $this->optionHandle->send($option)->with($value)->handle();
+            $this->optionHandle->send($option, $value)->handle();
         }
         return $this;
     }

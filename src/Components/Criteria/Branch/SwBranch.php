@@ -22,10 +22,11 @@ class SwBranch extends AbsBranch
     /**
      * Branch constructor.
      * @param mixed $checkValue 检查值
+     * @param int $options
      */
-    public function __construct($checkValue = null)
+    public function __construct($checkValue = null, int $options = 0)
     {
-        $this->control = new SwControl();
+        $this->control = new SwControl($options);
         $this->control->setCheckValue($checkValue);
         $this->init($checkValue, $this->control);
     }
@@ -43,11 +44,12 @@ class SwBranch extends AbsBranch
     /**
      * 创建
      * @param mixed $checkValue
+     * @param int $options
      * @return static
      */
-    public static function make($checkValue = null)
+    public static function make($checkValue = null, int $options = 0)
     {
-        return new static($checkValue);
+        return new static($checkValue, $options);
     }
     
     /**
@@ -121,6 +123,16 @@ class SwBranch extends AbsBranch
     public function control()
     {
         return $this->control;
+    }
+    
+    /**
+     * @param int $options
+     * @return $this
+     */
+    public function setControlOptions(int $options)
+    {
+        $this->control->setOptions($options);
+        return $this;
     }
     
     /**

@@ -7,11 +7,12 @@
 namespace CalJect\Productivity\Components\Http\Service;
 
 
-use CalJect\Productivity\Components\Criteria\Branch\BranchSwitchData;
+use CalJect\Productivity\Components\Criteria\Branch\SwBranch;
 use CalJect\Productivity\Components\Criteria\Criteria;
 use CalJect\Productivity\Components\Http\Client\HttpClient;
 use CalJect\Productivity\Components\Http\Client\HttpRequest;
 use CalJect\Productivity\Components\Http\Client\HttpResponse;
+use CalJect\Productivity\Exceptions\ClosureRunException;
 use Closure;
 
 class HttpService
@@ -43,7 +44,7 @@ class HttpService
     
     /**
      * http状态码绑定处理
-     * @var BranchSwitchData
+     * @var SwBranch
      */
     protected $httpBind;
     
@@ -57,7 +58,7 @@ class HttpService
     public function __construct()
     {
         $this->client = new HttpClient();
-        $this->httpBind = Criteria::switchData();
+        $this->httpBind = Criteria::newSwitchWithOptions(Criteria::SW_OPT_BRANCH_PARAMS_DATA_VALUES);
     }
     
     /*---------------------------------------------- http function ----------------------------------------------*/
@@ -163,12 +164,13 @@ class HttpService
     /**
      * 执行http请求
      * @return HttpResponse|mixed  返回http响应结果 或者 对应的处理返回的结果(如果对应bind回调有返回的话)
+     * @throws ClosureRunException
      */
     public function exec()
     {
         $httpResponse = $this->client->exec();
         $this->httpResponse = $httpResponse;
-        return $this->httpBind->send($httpResponse->getStatusCode())->with($httpResponse)->handle() ?? $httpResponse;
+        return $this->httpBind->send($httpResponse->getStatusCode(), $httpResponse)->handle() ?? $httpResponse;
     }
     
     /*---------------------------------------------- bind ----------------------------------------------*/

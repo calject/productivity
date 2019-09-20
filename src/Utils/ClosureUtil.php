@@ -36,4 +36,20 @@ class ClosureUtil
         }
     }
     
+    /**
+     * @param Closure|string|array $closure 检查的闭包函数或执行类(string/array)
+     * @param array $params                 执行参数
+     * @param null $default
+     * @return mixed|null
+     * @throws ClosureRunException
+     */
+    final public static function callNoNotNull($closure, array $params = [], $default = null)
+    {
+        if (isset($closure)) {
+            return self::checkClosureWithExec($closure, $params);
+        } else {
+            return $default;
+        }
+    }
+    
 }
