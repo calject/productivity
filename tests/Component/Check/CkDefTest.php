@@ -20,16 +20,18 @@ class CkDefTest extends TestCase
         $ckDef = CkDef::make(['t1' => 't1-data', 'ttt' => 'ttt-data']);
         $this->assertEquals('t1-data', $ckDef['t1']);
         $this->assertEquals('ttt-data', $ckDef['ttt']);
-        $this->assertEquals(null, $ckDef['any-str']);
-        $this->assertEquals(null, $ckDef->get('any-str', ''));
+        $this->assertSame(null, $ckDef['any-str']);
+        $this->assertSame(null, $ckDef->get('any-str'));
+        $this->assertSame(null, $ckDef->get('any-str', null));
+        $this->assertNotSame(null, $ckDef->get('any-str', ''));
         $this->assertIsArray($ckDef());
         $this->assertIsArray($ckDef->toArray());
         $this->assertIsArray($ckDef->all());
         
         $ckDefStr = CkDef::make(['s1' => 'str1-data', 's2' => 'str2-data'], '');
-        $this->assertEquals('str1-data', $ckDefStr['s1']);
-        $this->assertEquals('str2-data', $ckDefStr['s2']);
-        $this->assertEquals('', $ckDefStr['s3']);
-        $this->assertEquals('', $ckDefStr['string']);
+        $this->assertSame('str1-data', $ckDefStr['s1']);
+        $this->assertSame('str2-data', $ckDefStr['s2']);
+        $this->assertSame('', $ckDefStr['s3']);
+        $this->assertSame('', $ckDefStr['string']);
     }
 }

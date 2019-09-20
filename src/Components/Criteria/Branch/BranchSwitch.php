@@ -8,44 +8,34 @@ namespace CalJect\Productivity\Components\Criteria\Branch;
 
 
 use CalJect\Productivity\Contracts\Branch\AbsBranch;
+use CalJect\Productivity\Exceptions\ClosureRunException;
+use CalJect\Productivity\Utils\ClosureUtil;
 use Closure;
 
 class BranchSwitch extends AbsBranch
 {
     /**
-     * 检查值
-     * @var mixed|Closure
+     * @var BranchControl
      */
-    protected $checkValue;
-    
-    /**
-     * 绑定集
-     * @var Closure[]
-     */
-    protected $binds = [];
-    
-    /**
-     * 默认处理
-     * @var Closure
-     */
-    protected $default;
-    
+    protected $control;
     
     /**
      * Branch constructor.
-     * @param mixed $checkValue    检查值
+     * @param mixed $checkValue 检查值
      */
     public function __construct($checkValue = null)
     {
-        $this->checkValue = $checkValue;
-        $this->init($checkValue);
+        $this->control = new BranchControl();
+        $this->control->setCheckValue($checkValue);
+        $this->init($checkValue, $this->control);
     }
     
     /**
      * 初始化
      * @param mixed $checkValue
+     * @param BranchControl $control
      */
-    protected function init($checkValue)
+    protected function init($checkValue, BranchControl $control)
     {
     
     }
@@ -67,14 +57,14 @@ class BranchSwitch extends AbsBranch
      */
     public function send($checkValue)
     {
-        $this->checkValue = $checkValue;
+        $this->control->setCheckValue($checkValue);
         return $this;
     }
     
     /**
      * 绑定处理
      * @param string|array $keys
-     * @param Closure|string|array $handle   function($checkValue, [callable|string|null]$default, array $binds)
+     * @param Closure|string|array $handle function($checkValue, [callable|string|null]$default, array $binds)
      *                                       闭包回调(\Closure)、执行的类方法(string[class::method | $class->$method])
      * @return $this
      */
@@ -85,7 +75,7 @@ class BranchSwitch extends AbsBranch
                 $this->bind($item, $handle);
             }
         } else {
-            $this->binds[$keys] = $handle;
+            $this->control->appendBind($keys, $handle);
         }
         return $this;
     }
@@ -97,7 +87,7 @@ class BranchSwitch extends AbsBranch
      */
     public function binds(array $binds)
     {
-        $this->binds = $binds + $this->binds;
+        $this->control->setBinds($binds);
         return $this;
     }
     
@@ -108,24 +98,28 @@ class BranchSwitch extends AbsBranch
      */
     public function default($handle)
     {
-        $this->default = $handle;
+        $this->control->setDefault($handle);
         return $this;
     }
     
     /**
      * 处理
      * @return mixed
+     * @throws ClosureRunException
      */
     public function handle()
     {
-        $key = $this->checkClosureWithExec($this->checkValue) ?? $this->checkValue;
-        if (isset($this->binds[$key])) {
-            return $this->checkClosureWithExec($this->binds[$key], [$this->checkValue, $this->default, $this->binds]);
-        } else if ($this->default) {
-            return $this->checkClosureWithExec($this->default, [$this->checkValue, $this->binds]);
-        } else {
-            return $this->checkValue;
-        }
+        $checkValue = $this->control->getCheckValue();
+        $key = ClosureUtil::checkClosureWithExec($checkValue, [$this->control], false, $checkValue);
+        return $this->control->callInDefault($key);
+    }
+    
+    /**
+     * @return BranchControl
+     */
+    public function control()
+    {
+        return $this->control;
     }
     
 }
