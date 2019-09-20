@@ -123,4 +123,12 @@ class SwBranch extends AbsBranch
         return $this->control;
     }
     
+    /**
+     * @return mixed
+     * @throws ClosureRunException
+     */
+    public function __invoke()
+    {
+        return $this->handle();
+    }
 }

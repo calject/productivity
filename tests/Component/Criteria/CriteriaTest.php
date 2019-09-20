@@ -84,8 +84,8 @@ class CriteriaTest extends TestCase
     
     /**
      * @dataProvider switchData
-     * @param string|int $data
-     * @param mixed $result
+     * @param string|int $data      检查值
+     * @param mixed $result         检查结果值
      * @throws ClosureRunException
      */
     public function testSwitch($data, $result)
