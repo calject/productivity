@@ -8,6 +8,7 @@ namespace CalJect\Productivity\Test\Component\Check;
 
 
 use CalJect\Productivity\Components\Check\CkOpt;
+use CalJect\Productivity\Exceptions\ClosureRunException;
 use PHPUnit\Framework\TestCase;
 
 class CkOptTest extends TestCase
@@ -15,6 +16,7 @@ class CkOptTest extends TestCase
     const MODEL_CHECK = 1;
     const MODEL_OR = 2;
     const MODEL_AND = 3;
+    const MODEL_RUN = 4;
     
     /**
      * dataProvider
@@ -50,6 +52,20 @@ class CkOptTest extends TestCase
             'and-9'     => [7, [1, 2, 4, 8],    false,  self::MODEL_AND],
             'and-10'    => [7, [1, 2, 4, 9],    false,  self::MODEL_AND],
             'and-11'    => [7, [9],             false,  self::MODEL_AND],
+            'run-1'     => [7, ['check' => 1, 'match' => function() {
+                return 'match-run-1';
+            }], 'match-run-1', self::MODEL_RUN],
+            'run-2'     => [7, ['check' => 8, 'match' => function() {
+                return 'match-run-2';
+            }], false, self::MODEL_RUN],
+            'run-3'     => [7, ['check' => 8, 'match' => function() {
+                return 'match-run-3';
+            }, 'mis_match' => function() {
+                return 'mis-match-run-3';
+            }], 'mis-match-run-3', self::MODEL_RUN],
+            'run-4'     => [7, ['check' => 2, 'mis_match' => function() {
+                return 'mis-match-run-4';
+            }], true, self::MODEL_RUN],
         ];
     }
     
@@ -59,16 +75,19 @@ class CkOptTest extends TestCase
      * @param int $check
      * @param bool $determine
      * @param string $model
+     * @throws ClosureRunException
      */
     public function testOpts($opts, $check, $determine, $model)
     {
         $ckOpt = CkOpt::make($opts);
         if ($model === self::MODEL_CHECK) {
-            $this->assertEquals($determine, $ckOpt->check($check));
+            $this->assertSame($determine, $ckOpt->check($check));
         } elseif ($model === self::MODEL_OR) {
-            $this->assertEquals($determine, $ckOpt->checkOr($check));
+            $this->assertSame($determine, $ckOpt->checkOr($check));
         } elseif ($model === self::MODEL_AND) {
-            $this->assertEquals($determine, $ckOpt->checkAnd($check));
+            $this->assertSame($determine, $ckOpt->checkAnd($check));
+        } elseif ($model == self::MODEL_RUN) {
+            $this->assertSame($determine, $ckOpt->checkRun($check['check'], $check['match'] ?? null, $check['mis_match'] ?? null));
         }
     }
     
