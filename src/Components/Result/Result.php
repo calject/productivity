@@ -58,14 +58,32 @@ class Result
     protected $options = self::OPT_CONVERT_IN_ALL;
     
     /**
-     * @return InteriorResponse|mixed
+     * Result constructor.
+     * @param InteriorResponse $interiorResponse
+     */
+    public function __construct(InteriorResponse $interiorResponse)
+    {
+        $this->interiorResponse = $interiorResponse;
+    }
+    
+    /**
+     * @param InteriorResponse $interiorResponse
+     * @return Result
+     */
+    public static function make(InteriorResponse $interiorResponse)
+    {
+        return new static($interiorResponse);
+    }
+    
+    /**
+     * @return InteriorResponse|InteriorResponseObject|mixed
      * @throws TypeCheckException
      * @throws ClosureRunException
      */
     public function exec()
     {
         $response = $this->interiorResponse;
-        if ($this->resultClass instanceof InteriorResponseObject) {
+        if (is_subclass_of($this->resultClass, InteriorResponseObject::class)) {
             $response = $this->resultClass::convertByResponse($response);
             $throughResult = ClosureUtil::callNotNull($this->through, [$response, $this]);
             $response->setRequestObject($this->requestData);
@@ -75,7 +93,7 @@ class Result
                 CkOpt::make($this->options)->check($response->check() ? self::OPT_CONVERT_IN_SUCCESS : self::OPT_CONVERT_IN_ERROR) &&
                 $response->setResponseObject(ClosureUtil::callNotNull($this->convert, [$response->getData(), $throughResult]));
             }
-        } else if (!$this->resultClass) {
+        } else if ($this->resultClass) {
             TypeCheckException::throw('解析对象构建错误[is not subclass of InteriorResponseObject].');
         }
         return $response;
