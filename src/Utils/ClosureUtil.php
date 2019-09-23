@@ -43,7 +43,7 @@ class ClosureUtil
      * @return mixed|null
      * @throws ClosureRunException
      */
-    final public static function callNoNotNull($closure, array $params = [], $default = null)
+    final public static function callNotNull($closure, array $params = [], $default = null)
     {
         if (isset($closure)) {
             return self::checkClosureWithExec($closure, $params);

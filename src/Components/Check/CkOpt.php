@@ -6,6 +6,10 @@
 
 namespace CalJect\Productivity\Components\Check;
 
+use CalJect\Productivity\Exceptions\ClosureRunException;
+use CalJect\Productivity\Utils\ClosureUtil;
+use Closure;
+
 class CkOpt
 {
     /**
@@ -41,6 +45,22 @@ class CkOpt
     }
     
     /**
+     * @param int $check
+     * @param Closure|null $match
+     * @param Closure|null $mismatch
+     * @return mixed|null
+     * @throws ClosureRunException
+     */
+    public function checkRun(int $check, Closure $match = null, Closure $mismatch = null)
+    {
+        if ($this->check($check)) {
+            return ClosureUtil::callNotNull($match, [$this], true);
+        } else {
+            return ClosureUtil::callNotNull($mismatch, [$this], false);
+        }
+    }
+    
+    /**
      * @param mixed ...$args
      * @return bool
      */
@@ -66,5 +86,13 @@ class CkOpt
             $check |= $arg;
         }
         return ($this->opts & $check) === $check;
+    }
+    
+    /**
+     * @return int
+     */
+    public function getOpts(): int
+    {
+        return $this->opts;
     }
 }

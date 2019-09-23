@@ -67,14 +67,14 @@ class RequestDirector
                 return InteriorResponse::error(0, 'curl请求失败:' . $response->getCurlErrorNo(),
                     ["err_code" => $response->getCurlErrorNo(), "err_msg" => $response->getCurlErrorMsg()]);
             });
-            ClosureUtil::callNoNotNull($this->setting, [$httpService]);
+            ClosureUtil::callNotNull($this->setting, [$httpService]);
             return $httpService->exec();
         } catch (Throwable $throwable) {
             return InteriorResponse::exception($throwable);
         } finally {
             $_endTime = TimeUtil::getTimeMilliseconWhole();
             $_timeDiff = $_endTime - $_startTime;
-            ClosureUtil::callNoNotNull($this->finally, [$httpService, $_timeDiff]);
+            ClosureUtil::callNotNull($this->finally, [$httpService, $_timeDiff]);
         }
     }
     
