@@ -294,7 +294,7 @@ class Curl
         })->handle();
         $this->setOpt(CURLOPT_HEADERFUNCTION, function ($ch, $header) use (&$headers, &$httpData) {
             if ($content = trim($header)) {
-                if ($httpData) {
+                if ($httpData && strpos($content, ':') !== false) {
                     list($key, $value) = explode(':', $content,2);
                     $headers[$key] = trim($value);
                 } else {
