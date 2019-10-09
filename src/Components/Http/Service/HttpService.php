@@ -170,7 +170,14 @@ class HttpService
     {
         $httpResponse = $this->client->exec();
         $this->httpResponse = $httpResponse;
-        return $this->httpBind->send($httpResponse->getStatusCode(), $httpResponse)->handle() ?? $httpResponse;
+        $httpBind = $this->httpBind;
+        $httpBind->isBindDefault() || $this->httpBind->default(function () use ($httpResponse) {
+            return $httpResponse;
+        });
+        $httpBind->has(self::HTTP_CODE_200) || $this->success(function () use ($httpResponse) {
+            return $httpResponse;
+        });
+        return $httpBind->send($httpResponse->getStatusCode(), $httpResponse)->handle();
     }
     
     /*---------------------------------------------- bind ----------------------------------------------*/

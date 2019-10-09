@@ -12,6 +12,17 @@ use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Utils\ClosureUtil;
 use Closure;
 
+/**
+ * Class SwBranch
+ * @package CalJect\Productivity\Components\Criteria\Branch
+ *
+ * @see SwControl
+ * @method bool isBindHandle()
+ * @method bool isBindBinds()
+ * @method bool isBindDefault()
+ * @method bool has(string $bindKey)
+ *
+ */
 class SwBranch extends AbsBranch
 {
     /**
@@ -143,4 +154,17 @@ class SwBranch extends AbsBranch
     {
         return $this->handle();
     }
+    
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this->control, $name)) {
+            return $this->control->{$name}(...$arguments);
+        }
+    }
+    
 }

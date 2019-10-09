@@ -124,6 +124,30 @@ class SwControl
     }
     
     /**
+     * @return bool
+     */
+    public function isBindHandle(): bool
+    {
+        return $this->binds && $this->default;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isBindBinds(): bool
+    {
+        return (bool)$this->binds;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function isBindDefault(): bool
+    {
+        return (bool)$this->default;
+    }
+    
+    /**
      * @return array
      */
     protected function getParams(): array
