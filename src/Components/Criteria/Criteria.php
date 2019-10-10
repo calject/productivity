@@ -46,7 +46,7 @@ class Criteria
      * @param int $options
      * @return SwBranch
      */
-    public static function switchData($checkValue = null, $data = [], int $options = 0): SwBranch
+    public static function switchData($checkValue = null, $data = [], int $options = self::SW_OPT_BRANCH_PARAMS_DATA_VALUES): SwBranch
     {
         $branch = SwBranch::make($checkValue, $options);
         $branch->control()->setData($data);
