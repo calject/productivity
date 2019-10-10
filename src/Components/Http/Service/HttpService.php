@@ -13,6 +13,7 @@ use CalJect\Productivity\Components\Http\Client\HttpClient;
 use CalJect\Productivity\Components\Http\Client\HttpRequest;
 use CalJect\Productivity\Components\Http\Client\HttpResponse;
 use CalJect\Productivity\Exceptions\ClosureRunException;
+use CalJect\Productivity\Utils\ClosureUtil;
 use Closure;
 
 class HttpService
@@ -47,6 +48,11 @@ class HttpService
      * @var SwBranch
      */
     protected $httpBind;
+    
+    /**
+     * @var Closure/string/array
+     */
+    protected $finally;
     
     /**
      * 请求响应结果对象
@@ -177,7 +183,9 @@ class HttpService
         $httpBind->has(self::HTTP_CODE_200) || $this->success(function () use ($httpResponse) {
             return $httpResponse;
         });
-        return $httpBind->send($httpResponse->getStatusCode(), $httpResponse)->handle();
+        $response = $httpBind->send($httpResponse->getStatusCode(), $httpResponse)->handle();
+        ClosureUtil::callNotNull($this->finally, [$httpResponse, $response, $httpResponse->getStatusCode()]);
+        return $response;
     }
     
     /*---------------------------------------------- bind ----------------------------------------------*/
@@ -211,15 +219,15 @@ class HttpService
     /**
      * 绑定http状态码处理
      * @param int $code
-     * @param Closure $handle
+     * @param Closure|string|array $handle string: "class@method" array: [object, method]
      * 默认处理使用参数:
      *  function (HttpResponse $httpResponse) { }
      * 完整回调函数参数列表:
-     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: 默认参数回调 即error()绑定的回调  参数4: 所有绑定的回调列表
-     *  function (HttpResponse $httpResponse, int $http_code, \Closure $default, array $binds) { }
+     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: SwControl
+     *  function (HttpResponse $httpResponse, int $httpCode, SwControl $control) { }
      * @return $this
      */
-    public function bind($code, Closure $handle)
+    public function bind($code, $handle)
     {
         if ($code === self::HTTP_CODE_OTHER) {
             $this->error($handle);
@@ -231,30 +239,30 @@ class HttpService
     
     /**
      * 绑定请求成功处理
-     * @param Closure $successHandle
+     * @param Closure|string|array $successHandle string: "class@method" array: [object, method]
      * 默认处理使用参数:
      *  function (HttpResponse $httpResponse) { }
      * 完整回调函数参数列表:
-     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: 默认参数回调 即error()绑定的回调  参数4: 所有绑定的回调列表
-     *  function (HttpResponse $httpResponse, int $http_code, \Closure $default, array $binds) { }
+     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: SwControl
+     *  function (HttpResponse $httpResponse, int $httpCode, SwControl $control) { }
      * @return $this
      */
-    public function success(Closure $successHandle)
+    public function success($successHandle)
     {
         return $this->bind(self::HTTP_CODE_200, $successHandle);
     }
     
     /**
      * 绑定请求失败处理
-     * @param Closure $errorHandle
+     * @param Closure|string|array $errorHandle string: "class@method" array: [object, method]
      * * 默认处理使用参数:
      *  function (HttpResponse $httpResponse, int $http_code) { }
      * 完整回调函数参数列表:
-     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: 所有绑定的回调列表
-     *  function (HttpResponse $httpResponse, int $http_code, array $binds) { }
+     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: SwControl
+     *  function (HttpResponse $httpResponse, int $httpCode, SwControl $control) { }
      * @return $this
      */
-    public function error(Closure $errorHandle)
+    public function error($errorHandle)
     {
         /* ======== 错误处理绑定到default处理 ======== */
         $this->httpBind->default($errorHandle);
@@ -263,17 +271,30 @@ class HttpService
     
     /**
      * 绑定curl错误处理
-     * @param Closure $curlErrorHandle
+     * @param Closure|string|array $curlErrorHandle string: "class@method" array: [object, method]
      * 默认处理使用参数:
      *  function (HttpResponse $httpResponse) { }
      * 完整回调函数参数列表:
-     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: 默认参数回调 即error()绑定的回调  参数4: 所有绑定的回调列表
-     *  function (HttpResponse $httpResponse, int $http_code, \Closure $default, array $binds) { }
+     *  // 参数1: http请求响应对象  参数2: http状态码  参数3: SwControl
+     *  function (HttpResponse $httpResponse, int $httpCode, SwControl $control) { }
      * @return $this
      */
-    public function curlError(Closure $curlErrorHandle)
+    public function curlError($curlErrorHandle)
     {
         return $this->bind(self::HTTP_CURL_ERROR, $curlErrorHandle);
+    }
+    
+    /**
+     * @param Closure|string|array $finallyHandle string: "class@method" array: [object, method]
+     * 完整回调函数参数列表:
+     *  // 参数1: http请求响应对象  参数2: handle[success()/error()/...]处理后的返回结果 参数3: http状态码
+     *  function (HttpResponse $httpResponse, mixed $result, int $httpCode) { }
+     * @return $this
+     */
+    public function finally($finallyHandle)
+    {
+        $this->finally = $finallyHandle;
+        return $this;
     }
     
     /*---------------------------------------------- set ----------------------------------------------*/

@@ -178,10 +178,10 @@ class SwControl
     }
     
     /**
-     * @param Closure $default
+     * @param Closure|string|array $default
      * @return $this
      */
-    public function setDefault(Closure $default)
+    public function setDefault($default)
     {
         $this->default = $default;
         return $this;
