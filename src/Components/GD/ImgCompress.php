@@ -1,9 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: lirongyi@51ucar.cn
+ * Author: 沧澜
  * Date: 2019/3/12
- * Annotation:
  */
 
 namespace CalJect\Productivity\Components\GD;
