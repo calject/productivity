@@ -102,7 +102,7 @@ class HttpClient
         /* ======== 绑定body参数处理 ======== */
         $this->requestHandle->bind('body', function ($value, $key, SwControl $control) {
             // 自定义body参数设置的处理，然后交给default回调处理
-            if ($this->optionValue(self::OPTIONS_BODY_HTTP_BUILDER)) {
+            if ($this->optionValue(self::OPTIONS_BODY_HTTP_BUILDER) && $this->ckRequest()->getMethod() === Curl::GET) {
                 $value = is_array($value) ? http_build_query($value) : $value;
             }
             return $control->callDefault([$value, $key, $control]);

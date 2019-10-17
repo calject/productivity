@@ -88,7 +88,7 @@ class Curl
             $this->setOpt(CURLOPT_SSL_VERIFYPEER, false);
             $this->setOpt(CURLOPT_SSL_VERIFYHOST, false);
         }
-        $this->execOpts = self::CURL_BODY_BODY_PARSER | self::CURL_BODY_GET_PARSER;
+        $this->execOpts = self::CURL_BODY_GET_PARSER;
         return $this;
     }
     
