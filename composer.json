@@ -30,5 +30,12 @@
         "psr-4": {
             "CalJect\\Productivity\\Tests\\": "tests"
         }
+    },
+    "extra":{
+        "laravel":{
+            "providers": [
+                "CalJect\\Productivity\\Extra\\Laravel\\Providers\\CommandsProvider"
+            ]
+        }
     }
 }
