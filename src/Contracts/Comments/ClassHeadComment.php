@@ -52,7 +52,7 @@ abstract class ClassHeadComment extends ClassComment
      */
     protected function commentWithClassHead(FileInfo $fileInfo, string $comment = '')
     {
-        $head = "/*\n * Class " . $fileInfo->getClassName() . "\n * @package " . $fileInfo->getNamespace() . "\n";
+        $head = "/**\n * Class " . $fileInfo->getClassName() . "\n * @package " . $fileInfo->getNamespace() . "\n";
         return $head . $comment . " */\n";
     }
     

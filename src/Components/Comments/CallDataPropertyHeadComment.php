@@ -7,6 +7,7 @@
 namespace CalJect\Productivity\Components\Comments;
 
 use CalJect\Productivity\Contracts\Comments\ClassHeadComment;
+use CalJect\Productivity\Contracts\DataProperty\TCallDataProperty;
 use CalJect\Productivity\Models\FileInfo;
 use CalJect\Productivity\Utils\CommentUtil;
 use ReflectionClass;
@@ -18,6 +19,26 @@ use ReflectionProperty;
  */
 class CallDataPropertyHeadComment extends ClassHeadComment
 {
+    use TCallDataProperty;
+    
+    /**
+     * @note 默认检查属性说明注释部分tag(@note)
+     * @var string
+     */
+    protected $tagNote = 'note';
+    
+    /**
+     * @note 默认检查值类型注释部分tag(@var)
+     * @var string
+     */
+    protected $tagVar = 'var';
+    
+    /**
+     * @note 默认值类型
+     * @var string
+     */
+    protected $defVar = 'mixed';
+    
     /**
      * @param FileInfo $fileInfo
      * @param ReflectionClass $refClass
@@ -27,7 +48,7 @@ class CallDataPropertyHeadComment extends ClassHeadComment
     protected function getComments(FileInfo $fileInfo, ReflectionClass $refClass, string $filePath): string
     {
         array_map(function (ReflectionProperty $property) use (&$setting, &$getting, &$noting, &$varMaxLen, &$setStrMaxLen, &$getStrMaxLen) {
-            $getVar = CommentUtil::matchCommentTag('var', $property->getDocComment(), 'mixed');
+            $getVar = CommentUtil::matchCommentTag($this->tagVar, $property->getDocComment(), $this->defVar);
             $ucName = ucfirst($name = $property->getName());
             $setVar = $getVar === 'mixed' ? '' : $getVar . ' ';
             $setting[$name] = $setStr = " * @method \$this set{$ucName}({$setVar}\${$name})";

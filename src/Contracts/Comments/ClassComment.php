@@ -46,6 +46,7 @@ abstract class ClassComment
     
     /**
      * @param $filePath
+     * @return mixed
      * @throws ReflectionException
      */
     private function doHandle($filePath)
@@ -54,15 +55,15 @@ abstract class ClassComment
             $class = $fileInfo->getClass();
             $refClass = new ReflectionClass($class);
             if ($refClass->isAbstract() || $refClass->isInterface()) {
-                $this->errLog("class(${class}) can not be abstract or interface.", $err_log);
+                $this->errLog("class(${class}) can not be abstract or interface.", $errLog);
             }
             /* ======== 创建注释 ======== */
             $content = $this->create($fileInfo, $refClass, $filePath);
             /* ======== 写入文件 ======== */
-            dd($content);
-            // file_put_contents($filePath, $content);
+            file_put_contents($filePath, $content);
+            return $errLog ?? false;
         } else {
-            $this->errLog("$filePath 路径类解析异常.", $err_log);
+            $this->errLog("$filePath 路径类解析异常.", $errLog);
         }
     }
     

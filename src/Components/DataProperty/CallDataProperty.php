@@ -38,7 +38,7 @@ abstract class CallDataProperty
     /**
      * @param string $name
      * @param mixed $arguments
-     * @return $this
+     * @return $this|mixed
      */
     public function __call($name, $arguments)
     {

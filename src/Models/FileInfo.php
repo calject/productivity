@@ -11,29 +11,27 @@ use CalJect\Productivity\Components\DataProperty\CallDataProperty;
 /**
  * Class FileInfo
  * @package CalJect\Productivity\Models
- *
  * ---------- set ----------
  * @method $this setFilePath(string $filePath)
- * @method $this setFileDir(string $fileDir)
- * @method $this setFileName(string $fileName)
+ * @method $this setFileDir($fileDir)
+ * @method $this setFileName($fileName)
  * @method $this setClass(string $class)
- * @method $this setNamespace(string $namespace)
- * @method $this setClassName(string $className)
+ * @method $this setNamespace($namespace)
+ * @method $this setClassName($className)
  * @method $this setContent(string $content)
- * @method $this setCrown(string $crown)
- * @method $this setBelow(string $below)
- *
+ * @method $this setCrown($crown)
+ * @method $this setBelow($below)
+
  * ---------- get ----------
  * @method string getFilePath()
- * @method string getFileDir()
- * @method string getFileName()
+ * @method mixed  getFileDir()
+ * @method mixed  getFileName()
  * @method string getClass()
- * @method string getNamespace()
- * @method string getClassName()
+ * @method mixed  getNamespace()
+ * @method mixed  getClassName()
  * @method string getContent()
- * @method string getCrown()
- * @method string getBelow()
- *
+ * @method mixed  getCrown()
+ * @method mixed  getBelow()
  */
 class FileInfo extends CallDataProperty
 {

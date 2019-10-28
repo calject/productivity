@@ -6,6 +6,8 @@
 
 namespace CalJect\Productivity\Extra\Laravel\Component\Comments;
 
+use CalJect\Productivity\Contracts\Comments\ClassHeadComment;
+use CalJect\Productivity\Models\FileInfo;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,7 @@ use ReflectionException;
  * Class ModelComments
  * @package CalJect\Productivity\Extra\Laravel\Component\Comments
  */
-class ModelComment
+class ModelComment extends ClassHeadComment
 {
     /**
      * 查询表信息
@@ -123,6 +125,17 @@ COLUMN;
         }
         return $err_log;
         
+    }
+    
+    /**
+     * @param FileInfo $fileInfo
+     * @param ReflectionClass $refClass
+     * @param string $filePath
+     * @return string
+     */
+    protected function getComments(FileInfo $fileInfo, ReflectionClass $refClass, string $filePath): string
+    {
+        // TODO: Implement getComments() method.
     }
     
     
