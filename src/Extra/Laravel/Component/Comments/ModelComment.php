@@ -9,6 +9,7 @@ namespace CalJect\Productivity\Extra\Laravel\Component\Comments;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Class ModelComments
@@ -70,6 +71,7 @@ COLUMN;
      * 处理
      * @param string $dir
      * @return array
+     * @throws ReflectionException
      */
     public function handle(string $dir)
     {

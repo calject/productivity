@@ -53,7 +53,7 @@ class RequestDirector
     {
         $httpService = new HttpService();
         $builder = $this->getBuilder();
-        $_startTime = TimeUtil::getTimeMilliseconWhole();
+        $_startTime = TimeUtil::getTimeMillisecondWhole();
         try {
             $url = $builder->url($options);
             $body = $builder->body($options, $params);
@@ -72,7 +72,7 @@ class RequestDirector
         } catch (Throwable $throwable) {
             return InteriorResponse::exception($throwable);
         } finally {
-            $_endTime = TimeUtil::getTimeMilliseconWhole();
+            $_endTime = TimeUtil::getTimeMillisecondWhole();
             $_timeDiff = $_endTime - $_startTime;
             ClosureUtil::callNotNull($this->finally, [$httpService, $_timeDiff]);
         }

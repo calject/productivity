@@ -12,19 +12,18 @@ namespace CalJect\Productivity\Extra\Laravel\Component\Rules;
  */
 class Rule
 {
-
     /**
      * 基础验证规则
      * @var array
      */
     protected $baseRules = [];
-
+    
     /**
      * 附加验证规则
      * @var array
      */
     protected $expandRules = [];
-
+    
     /**
      * Rule constructor.
      * @param $rules
@@ -71,7 +70,7 @@ class Rule
         $this->expandRules = $expandRules;
         return $this;
     }
-
+    
     /**
      * @return array
      */
@@ -79,5 +78,5 @@ class Rule
     {
         return $this->expandRules + $this->baseRules;
     }
-
+    
 }

@@ -16,7 +16,7 @@ class GeneratorFileLoad
      * 读取的文件路径
      * @var string
      */
-    protected $dir= '';
+    protected $dir = '';
     
     /**
      * GeneratorFileLoad constructor.
@@ -54,13 +54,13 @@ class GeneratorFileLoad
      */
     public function readEachFiles()
     {
-       return $this->handleReadEachFiles($this->dir);
+        return $this->handleReadEachFiles($this->dir);
     }
     
     
     /**
      * 读取目录下所有文件名
-     * @param string $dir   递归查找的路径名
+     * @param string $dir 递归查找的路径名
      * @return Generator
      */
     private function handleReadEachFiles($dir)
@@ -69,7 +69,8 @@ class GeneratorFileLoad
         if ($handle = opendir($dir)) {
             while (($fl = readdir($handle)) !== false) {
                 $temp = $dir . DIRECTORY_SEPARATOR . $fl;
-                if (in_array($fl, ['.', '..'])) continue;
+                if (in_array($fl, ['.', '..']))
+                    continue;
                 is_dir($temp) ? yield $this->handleReadEachFiles($temp) : yield $temp;
             }
         }

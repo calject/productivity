@@ -58,9 +58,9 @@ class EnvConfigCommand extends Command
         $sniArr = SnippetArray::create($envArr);
         $sniArr->callable(function ($key, $value) use ($is_no_del) {
             $name = $this->split($value);
-            if ($is_no_del && 1 === strpos('$'.$name, '#')) {
+            if ($is_no_del && 1 === strpos('$' . $name, '#')) {
                 return '';
-            }else {
+            } else {
                 return "'${name}' => env('${name}'),";
             }
         });
@@ -74,11 +74,12 @@ class EnvConfigCommand extends Command
      * @param string $name
      * @return string
      */
-    protected function split($name) {
+    protected function split($name)
+    {
         if (strpos($name, '=') !== false) {
             list($name, $value) = array_map('trim', explode('=', $name, 2));
-            return trim(str_replace(array('export ', '\'', '"'), '', $name));
-        }else {
+            return trim(str_replace(['export ', '\'', '"'], '', $name));
+        } else {
             return $name;
         }
     }

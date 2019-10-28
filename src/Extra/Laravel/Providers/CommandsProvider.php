@@ -21,7 +21,8 @@ class CommandsProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot() {
+    public function boot()
+    {
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ModelCommentCommand::class,
@@ -35,7 +36,8 @@ class CommandsProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
     
     
     }

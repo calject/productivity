@@ -20,7 +20,7 @@ class Rules extends AbsSingleton
      * @var array
      */
     protected $rules = [];
-
+    
     /**
      * AbsSingleton constructor init handle.
      * @return mixed
@@ -30,7 +30,7 @@ class Rules extends AbsSingleton
         $this->rules = Lang::get('validation.rules');
         $this->rules = is_array($this->rules) ? $this->rules : [];
     }
-
+    
     /**
      * 获取路由规则构造
      * @param array ...$args
@@ -47,5 +47,5 @@ class Rules extends AbsSingleton
         }
         return new Rule($base_rules ?? []);
     }
-
+    
 }

@@ -7,7 +7,6 @@
 namespace CalJect\Productivity\Extra\Laravel\Component\Validator;
 
 
-
 use CalJect\Productivity\Components\Criteria\Criteria;
 use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Extra\Laravel\Contracts\Validator\IConstraint;
@@ -36,11 +35,11 @@ class Validator implements IValidate
     | OPT_E_NO_THROW_ERROR: 验证不通过不抛出ValidationException异常(不作异常处理)
     |
     */
-    const OPT_V_VALIDATOR       = 1;
-    const OPT_V_REQUEST         = 1 << 1;
+    const OPT_V_VALIDATOR = 1;
+    const OPT_V_REQUEST = 1 << 1;
     
-    const OPT_E_THROW_ERROR     = 1 << 2;
-    const OPT_E_NO_THROW_ERROR  = 1 << 3;
+    const OPT_E_THROW_ERROR = 1 << 2;
+    const OPT_E_NO_THROW_ERROR = 1 << 3;
     
     /**
      * @var IConstraint
@@ -121,7 +120,7 @@ class Validator implements IValidate
     
     /**
      * @param array $rules laravel  Lang设置的验证规则数组
-     * @param int $opts             配置参数
+     * @param int $opts 配置参数
      * @return static
      */
     public static function make(array $rules, int $opts)

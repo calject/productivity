@@ -10,6 +10,7 @@ namespace CalJect\Productivity\Extra\Laravel\Consoles\Commands;
 use CalJect\Productivity\Components\Check\CkDef;
 use CalJect\Productivity\Extra\Laravel\Component\Comments\ModelComment;
 use Illuminate\Console\Command;
+use ReflectionException;
 
 class ModelCommentCommand extends Command
 {
@@ -41,6 +42,7 @@ class ModelCommentCommand extends Command
      * Execute the console command.
      *
      * @return mixed
+     * @throws ReflectionException
      */
     public function handle()
     {
@@ -50,18 +52,18 @@ class ModelCommentCommand extends Command
                 echo "${dir}不是一个正确的目录";
                 return;
             }
-        }else {
+        } else {
             /* ======== 默认为model根目录下 ======== */
-            $dir = app_path().'/Models';
+            $dir = app_path() . '/Models';
         }
         $modelComments = new ModelComment();
         $errors = $modelComments->handle($dir);
         if (empty($result)) {
             echo "all success";
-        }else {
+        } else {
             $buffer = '';
             foreach ($errors as $error) {
-                $buffer .= "error${error['index']}:".$error['err_msg']."\n";
+                $buffer .= "error${error['index']}:" . $error['err_msg'] . "\n";
             }
             echo $buffer;
         }
