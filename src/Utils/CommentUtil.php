@@ -18,7 +18,7 @@ class CommentUtil
      */
     public static function matchCommentTag(string $tag, $docComment, $default = false)
     {
-        return ($docComment && preg_match('/@' . $tag . '(.*)\\n/', $docComment, $arr) && isset($arr[1]) && $text = trim($arr[1]))
+        return ($docComment && preg_match('/\*[ ]*@' . $tag . '(.*)\\n/', $docComment, $arr) && isset($arr[1]) && $text = trim($arr[1]))
             ? $text : $default;
     }
     

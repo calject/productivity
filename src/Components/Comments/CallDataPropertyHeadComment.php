@@ -16,19 +16,28 @@ use ReflectionProperty;
 /**
  * Class CallDataPropertyHeadComment
  * @package CalJect\Productivity\Components\Comments
+ * ---------- set ----------
+ * @method $this setTagNote(string $tagNote)    默认检查属性说明注释部分tag[@note]
+ * @method $this setTagVar(string $tagVar)      默认检查值类型注释部分tag[@var]
+ * @method $this setDefVar(string $defVar)      默认值类型
+
+ * ---------- get ----------
+ * @method string getTagNote()    默认检查属性说明注释部分tag[@note]
+ * @method string getTagVar()     默认检查值类型注释部分tag[@var]
+ * @method string getDefVar()     默认值类型
  */
 class CallDataPropertyHeadComment extends ClassHeadComment
 {
     use TCallDataProperty;
     
     /**
-     * @note 默认检查属性说明注释部分tag(@note)
+     * @note 默认检查属性说明注释部分tag[@note]
      * @var string
      */
     protected $tagNote = 'note';
     
     /**
-     * @note 默认检查值类型注释部分tag(@var)
+     * @note 默认检查值类型注释部分tag[@var]
      * @var string
      */
     protected $tagVar = 'var';
