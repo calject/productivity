@@ -144,7 +144,7 @@ COLUMN;
                 . ' ' . $info->comment . "\n";
         }
         $tail && $comments .= call_user_func($tail);
-        $comments .= "*/\n";
+        $comments .= " */\n";
         return $comments;
     }
     
