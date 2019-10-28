@@ -6,6 +6,7 @@
 
 namespace CalJect\Productivity\Extra\Laravel\Component\Comments;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use ReflectionClass;
@@ -130,11 +131,11 @@ COLUMN;
     /**
      * 创建注释信息
      * @param array $list
-     * @param \Closure $head
-     * @param \Closure $tail
+     * @param Closure $head
+     * @param Closure $tail
      * @return string
      */
-    public function createComments(array $list, \Closure $head = null, \Closure $tail = null)
+    public function createComments(array $list, Closure $head = null, Closure $tail = null)
     {
         $comments = "/**\n";
         $head && $comments .= call_user_func($head);
