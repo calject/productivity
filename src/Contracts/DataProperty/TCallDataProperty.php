@@ -31,12 +31,12 @@ trait TCallDataProperty
         $method = substr($name, 0, 3);
         $property = lcfirst(substr($name, 3));
         if ($method == 'set') {
-            $_ = $this->isCallSet ?? false ? $this->_callSet($property, $arguments) : ($this->{$property} = $arguments[0] ?? null);
+            $_ = $this->isCallSet ?? method_exists($this, 'isCallSet') ? $this->_callSet($property, $arguments) : ($this->{$property} = $arguments[0] ?? null);
             return $this;
         } elseif ($method == 'get') {
-            return $this->isCallGet ?? false ? $this->_callGet($property, $this->{$property}) : $this->{$property};
+            return $this->isCallGet ?? method_exists($this, 'isCallGet') ? $this->_callGet($property, $this->{$property}) : $this->{$property};
         } else {
-            if ($this->isCallOther ?? false) {
+            if ($this->isCallOther ?? method_exists($this, '_callOther')) {
                 return $this->_callOther($name, $arguments);
             }
         }

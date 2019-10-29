@@ -15,6 +15,11 @@ namespace CalJect\Productivity\Contracts\DataProperty;
 trait TCallDataPropertyByName
 {
     /**
+     * @var bool
+     */
+    private $isCallOther = true;
+    
+    /**
      * @param string $name
      * @param $arguments
      * @return mixed
