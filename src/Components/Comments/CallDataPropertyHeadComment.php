@@ -14,7 +14,6 @@ use CalJect\Productivity\Contracts\DataProperty\TCallDataPropertyByName;
 use CalJect\Productivity\Exceptions\ClosureRunException;
 use CalJect\Productivity\Models\FileInfo;
 use CalJect\Productivity\Utils\CommentUtil;
-use Closure;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -22,31 +21,22 @@ use ReflectionProperty;
  * Class CallDataPropertyHeadComment
  * @package CalJect\Productivity\Components\Comments
  * ---------- set ----------
- * @method $this setT1(string $t1)                     t111
- * @method $this setT2(string $t2)                     123as
- * @method $this setTagNote(string $tagNote)           默认检查属性说明注释部分tag
- * @method $this setTagVar(string $tagVar)             默认检查值类型注释部分tag
- * @method $this setDefVar(string $defVar)             默认值类型
- * @method $this setClassCheck(Closure $classCheck)    类检查（检查是否生成注释）
- * @method $this setOptions(int $options)              默认配置参数
+ * @method $this setTagNote(string $tagNote)    默认检查属性说明注释部分tag
+ * @method $this setTagVar(string $tagVar)      默认检查值类型注释部分tag
+ * @method $this setDefVar(string $defVar)      默认值类型
+ * @method $this setOptions(int $options)       默认配置参数
  * 
  * ---------- get ----------
- * @method string  getT1()            t111
- * @method string  getT2()            123as
- * @method string  getTagNote()       默认检查属性说明注释部分tag
- * @method string  getTagVar()        默认检查值类型注释部分tag
- * @method string  getDefVar()        默认值类型
- * @method Closure getClassCheck()    类检查（检查是否生成注释）
- * @method int     getOptions()       默认配置参数
+ * @method string getTagNote()    默认检查属性说明注释部分tag
+ * @method string getTagVar()     默认检查值类型注释部分tag
+ * @method string getDefVar()     默认值类型
+ * @method int    getOptions()    默认配置参数
  * 
  * ---------- apt ----------
- * @method $this|mixed t1(string $t1 = null)                     t111
- * @method $this|mixed t2(string $t2 = null)                     123as
- * @method $this|mixed tagNote(string $tagNote = null)           默认检查属性说明注释部分tag
- * @method $this|mixed tagVar(string $tagVar = null)             默认检查值类型注释部分tag
- * @method $this|mixed defVar(string $defVar = null)             默认值类型
- * @method $this|mixed classCheck(Closure $classCheck = null)    类检查（检查是否生成注释）
- * @method $this|mixed options(int $options = null)              默认配置参数
+ * @method $this|mixed tagNote(string $tagNote = null)    默认检查属性说明注释部分tag
+ * @method $this|mixed tagVar(string $tagVar = null)      默认检查值类型注释部分tag
+ * @method $this|mixed defVar(string $defVar = null)      默认值类型
+ * @method $this|mixed options(int $options = null)       默认配置参数
  */
 class CallDataPropertyHeadComment extends ClassHeadComment
 {
@@ -83,13 +73,6 @@ class CallDataPropertyHeadComment extends ClassHeadComment
      * @var string
      */
     protected $defVar = 'mixed';
-    
-    /**
-     * @note 类检查（检查是否生成注释）
-     * @var Closure
-     * @expain Closure 闭包响应bool值
-     */
-    protected $classCheck;
     
     /**
      * @note 默认配置参数
@@ -143,11 +126,15 @@ class CallDataPropertyHeadComment extends ClassHeadComment
         }, $refClass->getProperties());
         $swOptions = Criteria::opts($this->options);
         if ($strMaxLen) {
-            foreach ($proArr as $value) {
-                foreach ($value as $name => $content) {
-                    $_proArr[$name] = $content;
+            /* ======== 属性生成排序 ======== */
+            if ($ckOptions->check(self::COM_PRO)) {
+                foreach ($proArr as $value) {
+                    foreach ($value as $name => $content) {
+                        $sProArr[$name] = $content;
+                    }
                 }
             }
+            /* ======== 处理 ======== */
             $_setFunc = function ($head, $comArr, $strLen) use ($noting, $strMaxLen, &$comment) {
                 return function () use ($head, $comArr, $strLen, $strMaxLen, $noting, &$comment) {
                     $comment .= " * \n * ---------- $head ----------\n";
@@ -158,8 +145,8 @@ class CallDataPropertyHeadComment extends ClassHeadComment
                     }
                 };
             };
-            $swOptions
-                ->bind(self::COM_PRO, $_setFunc('pro', $_proArr, $strMaxLen['proStr']))
+            /* ======== bind && handle ======== */
+            $swOptions->bind(self::COM_PRO, $_setFunc('pro', $sProArr ?? $proArr, $strMaxLen['proStr']))
                 ->bind(self::COM_SET, $_setFunc('set', $setArr, $strMaxLen['set']))
                 ->bind(self::COM_GET, $_setFunc('get', $getArr, $strMaxLen['get']))
                 ->bind(self::COM_APT, $_setFunc('apt', $aptArr, $strMaxLen['apt']))
