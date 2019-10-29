@@ -33,7 +33,7 @@ abstract class ClassHeadComment extends ClassComment
     protected function create(FileInfo $fileInfo, ReflectionClass $refClass, string $filePath)
     {
         $crown = $fileInfo->getCrown();
-        preg_match_all("#(?:<\\?php(?:\\n)+)?/[*]{2}(.*?)\\*/\\n#s", $crown, $crown_no_com);
+        preg_match_all("#(?:<\\?php(?:\\n)+)?/[*]{1,2}(.*?)\\*/\\n#s", $crown, $crown_no_com);
         if ($matches = $crown_no_com[0]) {
             $comment_match = $matches[count($matches) - 1];
             if (strpos($comment_match, '<?php') === false) {
