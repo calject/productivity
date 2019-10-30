@@ -7,17 +7,26 @@
 namespace CalJect\Productivity\Contracts\Comments;
 
 
+use CalJect\Productivity\Contracts\Listener\ClassCommentListenerInterface;
 use CalJect\Productivity\Models\FileInfo;
 use CalJect\Productivity\Utils\GeneratorFileLoad;
+use CalJect\Productivity\Utils\GeneratorLoad;
 use ReflectionClass;
 use ReflectionException;
 
 abstract class ClassComment
 {
     /**
+     * 执行错误log
      * @var array
      */
-    protected $errLog;
+    protected $errLogs = [];
+    
+    /**
+     * 监听者列表
+     * @var ClassCommentListenerInterface[]
+     */
+    protected $listeners = [];
     
     /**
      * @param FileInfo $fileInfo
@@ -42,9 +51,10 @@ abstract class ClassComment
                 return;
             }
         } else {
-            (new GeneratorFileLoad($path))->eachFiles(function ($filePath) {
+            (new GeneratorFileLoad($path))->eachFiles(function ($index, $filePath) {
                 $this->doHandle($filePath);
-            });
+                $this->notify($index, $filePath);
+            }, GeneratorLoad::OPT_GET_INDEX);
         }
     }
     
@@ -65,7 +75,6 @@ abstract class ClassComment
             $content = $this->create($fileInfo, $refClass, $filePath);
             /* ======== 写入文件 ======== */
             file_put_contents($filePath, $content);
-            return $errLog ?? false;
         } else {
             $this->errLog("$filePath 路径类解析异常.");
         }
@@ -114,9 +123,23 @@ abstract class ClassComment
      */
     protected function errLog($errMsg)
     {
-        return $this->errLog[] = [
+        return $this->errLogs[] = [
             'errMsg' => $errMsg
         ];
     }
     
+    protected function notify($index, $fileInfo)
+    {
+        foreach ($this->listeners as $listener) {
+            $listener->listen($index, $fileInfo);
+        }
+    }
+    
+    /**
+     * @return array
+     */
+    public function getErrLogs(): array
+    {
+        return $this->errLogs;
+    }
 }

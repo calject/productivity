@@ -32,7 +32,7 @@ class GeneratorFileLoad
      * @param Closure $handle function($index, $value) {} when options = 1 or function($value) {}  when options = 0
      * @param int $options
      */
-    public function eachFiles(Closure $handle, int $options = 0)
+    public function eachFiles(Closure $handle, int $options = GeneratorLoad::OPT_NO_INDEX)
     {
         GeneratorLoad::each($this->readEachFiles(), $handle, $options);
     }
