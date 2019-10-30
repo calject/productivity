@@ -60,21 +60,24 @@ class ModelComment extends ClassHeadComment
             return '';
         }
         /* ======== 获取数字库字段信息，并生成注释信息 ======== */
+        $strMaxLen = ['var' => 0, 'pro' => 0];
         $columnInfo = $this->dbSelect($connection, sprintf(MysqlConstant::SQL_QUERY_COLUMN, $table, $database));
         array_map(function ($info) use (&$comment, &$proArr, &$noting, &$strMaxLen) {
             $vType = $this->match($info->data_type);
             $name = $info->column_name;
             $proArr[$name] = ['var' => $vType, 'str' => $proStr = " * @property \$var \$$name"];
             $noting[$name] = $info->comment;
+            $strMaxLen['var'] = ($varLen = strlen($vType)) > $strMaxLen['var'] ? $varLen : $strMaxLen['var'];
+            $strMaxLen['pro'] = ($proLen = strlen($proStr) - 4 + $strMaxLen['var']) > $strMaxLen['pro'] ? $proLen : $strMaxLen['pro'];
         }, $columnInfo);
         $comment = '';
         if ($strMaxLen) {
             foreach ($proArr as $name => $content) {
                 $content = str_replace('$var', str_pad($content['var'], $strMaxLen['var'], ' '), $content['str']);
-                $comment .= ($noting[$name] ? str_pad($content, $strMaxLen + 4, ' ') . $noting[$name] : $content) . "\n";
+                $comment .= ($noting[$name] ? str_pad($content, $strMaxLen['pro'] + 4, ' ') . $noting[$name] : $content) . "\n";
             }    
         }
-        return $comment;
+        return $this->commentWithClassHead($fileInfo, $comment);
     }
     
     
@@ -90,7 +93,7 @@ class ModelComment extends ClassHeadComment
         foreach ($this->columnMatch as $key => $match) {
             if ($match['type'] === self::COLUMN_TYPE_STR_POS && strpos($string, $match['match']) !== false) {
                 return $key;
-            } else if (preg_match($match['match'], $string, $result)) {
+            } else if ($match['type'] === self::COLUMN_TYPE_MATCH && preg_match($match['match'], $string, $result)) {
                 return $key;
             }
         }
