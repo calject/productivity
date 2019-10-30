@@ -25,7 +25,7 @@ class GeneratorLoad
     {
         foreach ($list as $index => $value) {
             $params = ($options & 1 === 1) ? [$index, $value] : [$value];
-            $value instanceof Generator ? self::each($value, $handle) : call_user_func_array($handle, $params);
+            $value instanceof Generator ? self::each($value, $handle, $options) : call_user_func_array($handle, $params);
         }
     }
     
