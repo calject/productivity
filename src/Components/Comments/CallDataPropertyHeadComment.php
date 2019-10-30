@@ -99,10 +99,12 @@ class CallDataPropertyHeadComment extends ClassHeadComment
         ];
         array_map(function (ReflectionProperty $property) use ($ckOptions, $mapProModifiers, &$setArr, &$getArr, &$aptArr, &$proArr, &$noting, &$strMaxLen) {
             /* ======== check ======== */
-            if ($property->isStatic()) goto end;
-            if ($ckOptions->check(self::PRO_NO_PUBLIC) && $property->isPublic()) goto end;
-            if ($ckOptions->check(self::PRO_NO_PROTECTED) && $property->isProtected()) goto end;
-            if ($ckOptions->check(self::PRO_NO_PRIVATE) && $property->isPrivate()) goto end;
+            if ($property->isStatic()
+                || $ckOptions->check(self::PRO_NO_PUBLIC) && $property->isPublic()
+                || $ckOptions->check(self::PRO_NO_PROTECTED) && $property->isProtected()
+                || $ckOptions->check(self::PRO_NO_PRIVATE) && $property->isPrivate()) {
+                goto end;
+            }
             
             /* ======== comment ======== */
             $getVar = CommentUtil::matchCommentTag($this->tagVar, $property->getDocComment(), $this->defVar);
@@ -128,11 +130,9 @@ class CallDataPropertyHeadComment extends ClassHeadComment
         if ($strMaxLen) {
             /* ======== 属性生成排序 ======== */
             if ($ckOptions->check(self::COM_PRO)) {
-                foreach ($proArr as $value) {
-                    foreach ($value as $name => $content) {
-                        $sProArr[$name] = $content;
-                    }
-                }
+                $proArr = array_reduce($proArr, function ($val1, $val2) {
+                    return array_merge($val1, $val2);
+                }, []);
             }
             /* ======== 处理 ======== */
             $_setFunc = function ($head, $comArr, $strLen) use ($noting, $strMaxLen, &$comment) {
@@ -146,7 +146,7 @@ class CallDataPropertyHeadComment extends ClassHeadComment
                 };
             };
             /* ======== bind && handle ======== */
-            $swOptions->bind(self::COM_PRO, $_setFunc('pro', $sProArr ?? $proArr, $strMaxLen['proStr']))
+            $swOptions->bind(self::COM_PRO, $_setFunc('pro', $proArr, $strMaxLen['proStr']))
                 ->bind(self::COM_SET, $_setFunc('set', $setArr, $strMaxLen['set']))
                 ->bind(self::COM_GET, $_setFunc('get', $getArr, $strMaxLen['get']))
                 ->bind(self::COM_APT, $_setFunc('apt', $aptArr, $strMaxLen['apt']))
