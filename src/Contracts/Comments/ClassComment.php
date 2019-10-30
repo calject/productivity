@@ -14,6 +14,10 @@ use ReflectionException;
 
 abstract class ClassComment
 {
+    /**
+     * @var array
+     */
+    protected $errLog;
     
     /**
      * @param FileInfo $fileInfo
@@ -55,7 +59,7 @@ abstract class ClassComment
             $class = $fileInfo->getClass();
             $refClass = new ReflectionClass($class);
             if ($refClass->isAbstract() || $refClass->isInterface()) {
-                $this->errLog("class(${class}) can not be abstract or interface.", $errLog);
+                $this->errLog("class(${class}) can not be abstract or interface.");
             }
             /* ======== 创建注释 ======== */
             $content = $this->create($fileInfo, $refClass, $filePath);
@@ -63,7 +67,7 @@ abstract class ClassComment
             file_put_contents($filePath, $content);
             return $errLog ?? false;
         } else {
-            $this->errLog("$filePath 路径类解析异常.", $errLog);
+            $this->errLog("$filePath 路径类解析异常.");
         }
     }
     
@@ -106,12 +110,11 @@ abstract class ClassComment
     
     /**
      * @param string $errMsg
-     * @param array $log
      * @return array
      */
-    protected function errLog($errMsg, &$log)
+    protected function errLog($errMsg)
     {
-        return $log[] = [
+        return $this->errLog[] = [
             'errMsg' => $errMsg
         ];
     }
