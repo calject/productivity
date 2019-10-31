@@ -149,6 +149,7 @@ class CallDataPropertyHeadComment extends ClassHeadComment
                     foreach ($comArr as $name => $content) {
                         is_array($content) && isset($content['property']) && $noting[$name] = str_pad($content['property'], $strMaxLen['pro'] + 1, ' ') . $noting[$name];
                         is_array($content) && strpos($content['str'], '$var') && $content = str_replace('$var', str_pad($content['var'], $strMaxLen['var'], ' '), $content['str']);
+                        $noting[$name] = str_replace(')', ']', str_replace('(', '[', $noting[$name]));
                         $comment .= ($noting[$name] ? str_pad($content, $strLen + 4, ' ') . $noting[$name] : $content) . "\n";
                     }
                 };
