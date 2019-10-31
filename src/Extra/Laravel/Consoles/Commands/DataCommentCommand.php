@@ -32,7 +32,10 @@ class DataCommentCommand extends Command
     {--no-set : 不生成set方法注释}
     {--no-pro : 不生成property属性注释}
     {--no-apt : 不生成adapter方法注释}
-    {--no-cur : 生成所有属性,包含继承}';
+    {--no-cur : 生成所有属性,包含继承}
+    {--def-var=mixed : 设置默认位置属性值}
+    {--var-tag=var : 设置默认检查的属性值}
+    {--note-tag=note : 设置默认检查文本值}';
     
     protected $description = '根据类属性生成类(get/set/apt/property)属性注释';
     
@@ -65,6 +68,9 @@ class DataCommentCommand extends Command
             
             $dataComment = new DataCommnet();
             $dataComment->outputByCommand($this)
+                ->defVar($this->option('def-var'))
+                ->tagVar($this->option('var-tag'))
+                ->tagNote($this->option('note-tag'))
                 ->options($options)
                 ->handle($path);
         } else {
