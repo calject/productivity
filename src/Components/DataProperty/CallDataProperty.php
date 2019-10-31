@@ -6,6 +6,8 @@
 
 namespace CalJect\Productivity\Components\DataProperty;
 
+use CalJect\Productivity\Components\DataProperty\Exception\VerifyException;
+use CalJect\Productivity\Utils\CommentUtil;
 use Closure;
 
 /**
@@ -80,5 +82,42 @@ abstract class CallDataProperty
             call_user_func_array($handle,[$this, $property, $data[$property] ?? null, $value]);
         }
         return $this;
+    }
+    
+    /*---------------------------------------------- protected ----------------------------------------------*/
+    
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return $this|mixed
+     */
+    protected function _runCallSet(string $name, $value)
+    {
+        return $this->{'set' . ucfirst($name)}($value);
+    }
+    
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    protected function _runCallGet(string $name)
+    {
+        return $this->{'get' . ucfirst($name)}();
+    }
+    
+    /**
+     * @param string $class
+     * @param string $name
+     * @param string $docComment
+     * @param string $checkTag
+     * @throws VerifyException
+     */
+    protected function throwVerifyException(string $class, string $name, string $docComment, $checkTag = 'note')
+    {
+        if ($note = CommentUtil::matchCommentTag($checkTag, $docComment)) {
+            VerifyException::throw("{$note}[$name] 字段不能为空.", 422);
+        } else {
+            VerifyException::throw(basename(str_replace('\\', '/', $class)) . "::$name 属性不能为空.", 422);
+        }
     }
 }

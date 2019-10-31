@@ -6,7 +6,7 @@
 
 namespace CalJect\Productivity\Tests\Component\DataProperty\TestClass;
 
-use CalJect\Productivity\Components\DataProperty\CallDataPropertyCheckEmpty;
+use CalJect\Productivity\Components\DataProperty\CallDataPropertyEmpty;
 
 /**
  * Class TestCallDataPropertyCheckEmptyData
@@ -19,7 +19,7 @@ use CalJect\Productivity\Components\DataProperty\CallDataPropertyCheckEmpty;
  * @method int getVal2()
  * @method string getVal3()
  */
-class TestCallDataPropertyCheckEmptyData extends CallDataPropertyCheckEmpty
+class TestCallDataPropertyCheckEmptyData extends CallDataPropertyEmpty
 {
     
     /**

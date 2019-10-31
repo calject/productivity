@@ -22,4 +22,14 @@ class CommentUtil
             ? $text : $default;
     }
     
+    /**
+     * @param string $tag
+     * @param string $docComment
+     * @return bool
+     */
+    public static function checkCommentTag(string $tag, string $docComment)
+    {
+        return strpos($docComment, '@' . $tag) !== false;
+    }
+    
 }
