@@ -42,19 +42,20 @@ class ModelCommentCommand extends Command
         $options = CkDef::make($this->argument());
         if ($dir = $options['dir']) {
             if (!is_dir($dir)) {
-                return $this->error("${dir}不是一个正确的目录");
+                $this->error("${dir}不是一个正确的目录");
+                exit;
             }
         } else {
             $dir = app_path('Models');
         }
         $modelComment = new ModelComment();
-        $modelComment->handle($dir);
-        if ($errLogs = $modelComment->getErrLogs()) {
-            foreach ($errLogs as $errLog) {
-                $this->error($errLog);
-            }
-        } else {
-            $this->info("all success");
-        }
+        $modelComment->outputByCommand($this)->handle($dir);
+        // if ($errLogs = $modelComment->getErrLogs()) {
+        //     foreach ($errLogs as $errLog) {
+        //         $this->error($errLog);
+        //     }
+        // } else {
+        //     $this->info("all success");
+        // }
     }
 }

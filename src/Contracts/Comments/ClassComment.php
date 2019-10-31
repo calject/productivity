@@ -8,9 +8,11 @@ namespace CalJect\Productivity\Contracts\Comments;
 
 
 use CalJect\Productivity\Contracts\Listener\ClassCommentListenerInterface;
+use CalJect\Productivity\Extra\Laravel\Contracts\Commands\Command;
 use CalJect\Productivity\Models\FileInfo;
 use CalJect\Productivity\Utils\GeneratorFileLoad;
 use CalJect\Productivity\Utils\GeneratorLoad;
+use Closure;
 use ReflectionClass;
 use ReflectionException;
 
@@ -27,6 +29,13 @@ abstract class ClassComment
      * @var ClassCommentListenerInterface[]
      */
     protected $listeners = [];
+    
+    /**
+     * 输出回调
+     * @var Closure function(string $type = 'info', string $message)
+     * @explain type: info 、 error 、 success 、 finish
+     */
+    protected $output = null;
     
     /**
      * @param FileInfo $fileInfo
@@ -47,14 +56,14 @@ abstract class ClassComment
             if (is_file($path)) {
                 $this->doHandle($path);
             } else {
-                echo "必须为一个正确的目录或者文件.";
-                return;
+                $this->errLog("$path 必须为一个正确的目录或者文件..");
             }
         } else {
             (new GeneratorFileLoad($path))->eachFiles(function ($index, $filePath) {
                 $this->doHandle($filePath);
                 $this->notify($index, $filePath);
             }, GeneratorLoad::OPT_GET_INDEX);
+            $this->runOutput('finish', 'finish');
         }
     }
     
@@ -73,6 +82,7 @@ abstract class ClassComment
             }
             /* ======== 创建注释 ======== */
             $content = $this->create($fileInfo, $refClass, $filePath);
+            $this->runOutput('success', "output ==> $filePath");
             /* ======== 写入文件 ======== */
             file_put_contents($filePath, $content);
         } else {
@@ -80,6 +90,41 @@ abstract class ClassComment
         }
     }
     
+    /**
+     * @return array
+     */
+    public function getErrLogs(): array
+    {
+        return $this->errLogs;
+    }
+    
+    /**
+     * @param Closure $output
+     * @return $this
+     */
+    public function output(Closure $output)
+    {
+        $this->output = $output;
+        return $this;
+    }
+    
+    /**
+     * @param Command $command
+     * @return $this
+     */
+    public function outputByCommand(Command $command)
+    {
+        $this->output = function ($type, $message) use ($command) {
+            if ($type == 'error') {
+                $command->error($message);
+            } elseif (in_array($type, ['success', 'info', 'finish'])) {
+                $command->info($message);
+            } else {
+                $command->line($message);
+            }
+        };
+        return $this;
+    }
     
     /*---------------------------------------------- function ----------------------------------------------*/
     /**
@@ -123,6 +168,7 @@ abstract class ClassComment
      */
     protected function errLog($errMsg)
     {
+        $this->runOutput('error', $errMsg);
         return $this->errLogs[] = [
             'errMsg' => $errMsg
         ];
@@ -136,10 +182,11 @@ abstract class ClassComment
     }
     
     /**
-     * @return array
+     * @param string $type
+     * @param string $message
      */
-    public function getErrLogs(): array
+    protected function runOutput(string $type, string $message)
     {
-        return $this->errLogs;
+        $this->output && call_user_func_array($this->output, [$type, $message]);
     }
 }
