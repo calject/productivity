@@ -115,6 +115,7 @@ abstract class ClassComment
     public function outputByCommand(Command $command)
     {
         $this->output = function ($type, $message) use ($command) {
+            $message = "[$type] $message";
             if ($type == 'error') {
                 $command->error($message);
             } elseif (in_array($type, ['success', 'info', 'finish'])) {
