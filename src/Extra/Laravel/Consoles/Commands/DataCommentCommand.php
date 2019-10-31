@@ -47,9 +47,9 @@ class DataCommentCommand extends Command
             if ($this->option('all')) {
                 $options = DataCommnet::COM_ALL;
             } elseif ($this->option('def')) {
-                $options = DataCommnet::COM_GET | DataCommnet::COM_GET;
+                $options = DataCommnet::COM_SET | DataCommnet::COM_GET;
             } else {
-                $options = DataCommnet::COM_GET | DataCommnet::COM_GET | DataCommnet::OPT_CREATE_CURRENT;
+                $options = DataCommnet::COM_SET | DataCommnet::COM_GET | DataCommnet::OPT_CREATE_CURRENT;
             }
             $this->option('get') && $options |= DataCommnet::COM_GET;
             $this->option('set') && $options |= DataCommnet::COM_SET;
