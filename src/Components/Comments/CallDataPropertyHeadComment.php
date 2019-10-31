@@ -100,7 +100,7 @@ class CallDataPropertyHeadComment extends ClassHeadComment
             ReflectionProperty::IS_PRIVATE => '[private]',
         ];
         $ckOptions->checkRun(self::OPT_CREATE_CURRENT, function () use ($fileInfo, &$currentPropertyMath) {
-            preg_match_all("/[ ]+(?:(?:public|protected|private)\s+)\\$([\S=]*).*;/", $fileInfo->getContent(), $outArr);
+            preg_match_all("/[ \t]+(?:(?:public|protected|private)\s+)\\$([\S=]*).*;/", $fileInfo->getContent(), $outArr);
             $currentPropertyMath = ($outArr && isset($outArr[1])) ? $outArr[1] : [];
         });
         array_map(function (ReflectionProperty $property) use ($ckOptions, $currentPropertyMath, $mapProModifiers, &$setArr, &$getArr, &$aptArr, &$proArr, &$noting, &$strMaxLen) {
