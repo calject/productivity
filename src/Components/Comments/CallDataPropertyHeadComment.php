@@ -54,6 +54,8 @@ class CallDataPropertyHeadComment extends ClassHeadComment
     const PRO_NO_PROTECTED = 1 << 5;        // 不生成保护属性方法
     const PRO_NO_PUBLIC = 1 << 6;           // 不生成公共属性方法
     
+    const OPT_CREATE_CURRENT = 1 << 7;      // 只生成当前类定义的属性(不包括继承及use属性)
+    
     /**
      * @note 默认检查属性说明注释部分tag
      * @var string
@@ -97,7 +99,11 @@ class CallDataPropertyHeadComment extends ClassHeadComment
             ReflectionProperty::IS_PROTECTED => '[protected]',
             ReflectionProperty::IS_PRIVATE => '[private]',
         ];
-        array_map(function (ReflectionProperty $property) use ($ckOptions, $mapProModifiers, &$setArr, &$getArr, &$aptArr, &$proArr, &$noting, &$strMaxLen) {
+        $ckOptions->checkRun(self::OPT_CREATE_CURRENT, function () use ($fileInfo, &$currentPropertyMath) {
+            preg_match_all("/[ ]+(?:(?:public|protected|private)\s+)\\$([\S=]*).*;/", $fileInfo->getContent(), $outArr);
+            $currentPropertyMath = ($outArr && isset($outArr[1])) ? $outArr[1] : [];
+        });
+        array_map(function (ReflectionProperty $property) use ($ckOptions, $currentPropertyMath, $mapProModifiers, &$setArr, &$getArr, &$aptArr, &$proArr, &$noting, &$strMaxLen) {
             /* ======== check ======== */
             if ($property->isStatic()
                 || $ckOptions->check(self::PRO_NO_PUBLIC) && $property->isPublic()
@@ -105,7 +111,9 @@ class CallDataPropertyHeadComment extends ClassHeadComment
                 || $ckOptions->check(self::PRO_NO_PRIVATE) && $property->isPrivate()) {
                 goto end;
             }
-            
+            if ($currentPropertyMath && !in_array($property->getName(), $currentPropertyMath)) {
+                goto end;
+            }
             /* ======== comment ======== */
             $getVar = CommentUtil::matchCommentTag($this->tagVar, $property->getDocComment(), $this->defVar);
             $ucName = ucfirst($name = $property->getName());
