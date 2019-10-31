@@ -55,6 +55,7 @@ abstract class ClassComment
         if (!is_dir($path)) {
             if (is_file($path)) {
                 $this->doHandle($path);
+                $this->runOutput('finish', 'finish');
             } else {
                 $this->errLog("$path 必须为一个正确的目录或者文件..");
             }

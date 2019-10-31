@@ -29,7 +29,7 @@ class DataCommentCommand extends Command
      */
     public function handle()
     {
-        if (($path = $this->argument('dir')) && (is_dir($path) || is_file($path))) {
+        if (($path = $this->argument('path')) && (is_dir($path) || is_file($path))) {
             $dataComment = new CallDataPropertyHeadComment();
             $dataComment->outputByCommand($this)->handle($path);
         } else {
