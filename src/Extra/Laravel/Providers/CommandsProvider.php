@@ -6,6 +6,7 @@
 
 namespace CalJect\Productivity\Extra\Laravel\Providers;
 
+use CalJect\Productivity\Extra\Laravel\Consoles\Commands\DataCommentCommand;
 use CalJect\Productivity\Extra\Laravel\Consoles\Commands\EnvConfigCommand;
 use CalJect\Productivity\Extra\Laravel\Consoles\Commands\ModelCommentCommand;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +27,7 @@ class CommandsProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 ModelCommentCommand::class,
+                DataCommentCommand::class,
                 EnvConfigCommand::class,
             ]);
         }
