@@ -8,7 +8,6 @@ namespace CalJect\Productivity\Contracts\Comments;
 
 
 use CalJect\Productivity\Contracts\Listener\ClassCommentListenerInterface;
-use CalJect\Productivity\Extra\Laravel\Contracts\Commands\Command;
 use CalJect\Productivity\Models\FileInfo;
 use CalJect\Productivity\Utils\GeneratorFileLoad;
 use CalJect\Productivity\Utils\GeneratorLoad;
@@ -110,10 +109,10 @@ abstract class ClassComment
     }
     
     /**
-     * @param Command $command
+     * @param $command
      * @return $this
      */
-    public function outputByCommand(Command $command)
+    public function outputByCommand($command)
     {
         $this->output = function ($type, $message) use ($command) {
             $message = "[$type] $message";
