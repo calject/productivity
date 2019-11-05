@@ -26,5 +26,10 @@
         "psr-4": {
             "CalJect\\Productivity\\": "src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CalJect\\Productivity\\Tests\\": "tests"
+        }
     }
 }
