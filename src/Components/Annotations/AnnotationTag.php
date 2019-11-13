@@ -108,7 +108,7 @@ class AnnotationTag
      */
     public static function matchValue(string $docComment, $default = false, Closure $handle = null)
     {
-        if (preg_match("/\('?([^'()]*)'?\)/", $docComment, $values) && $values[1]) {
+        if (preg_match("/\(?'?([^'()]*)'?\)?/", $docComment, $values) && $values[1]) {
             return $handle ? call_user_func($handle, $values[1]) : $values[1];
         } else {
             return $default;
