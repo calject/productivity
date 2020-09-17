@@ -93,15 +93,22 @@ class SwBranch extends AbsBranch
         }
         return $this;
     }
-    
+
     /**
      * 绑定关系集
      * @param array $binds [$key => function($checkValue, [callable|string|null]$default, array $binds)]
+     * @param Closure|null $func    通用闭包处理
      * @return $this
      */
-    public function binds(array $binds)
+    public function binds(array $binds, Closure $func = null)
     {
-        $this->control->setBinds($binds);
+        if ($func) {
+            foreach ($binds as $key) {
+                $this->bind($key, $func);
+            }
+        } else {
+            $this->control->setBinds($binds);
+        }
         return $this;
     }
     

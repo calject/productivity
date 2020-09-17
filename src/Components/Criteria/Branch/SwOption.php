@@ -35,7 +35,7 @@ class SwOption extends SwBranch
         $opts = ClosureUtil::checkClosureWithExec($checkValue, [$control], false, $checkValue);
         foreach ($control->getBinds() as $opt => $closure) {
             if (SCkOpt::check($opts, $opt)) {
-                ClosureUtil::checkClosureWithExec($closure, [$control->getData()]);
+                ClosureUtil::checkClosureWithExec($closure, [$control->getData(), $opt]);
                 $_ck = true;
             }
         }
