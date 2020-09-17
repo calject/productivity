@@ -2,4 +2,4 @@ composer.phar
 composer.lock
 /.idea/
 /vendor/
-test_*
+/tests_local/
